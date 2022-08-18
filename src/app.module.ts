@@ -2,27 +2,13 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { PubSub } from 'graphql-subscriptions';
-import { join } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { PingPongResolvers } from './ping-pong.resolver';
+import { EventsModule } from './events/events.module';
 
 @Module({
-  imports: [
-    GraphQLModule.forRoot<ApolloDriverConfig>({
-      driver: ApolloDriver,
-      typePaths: ['./**/*.graphql'],
-      installSubscriptionHandlers: true,
-    }),
-  ],
+  imports: [EventsModule],
   controllers: [AppController],
-  providers: [
-    AppService,
-    PingPongResolvers,
-    {
-      provide: 'PUB_SUB',
-      useValue: new PubSub(),
-    },
-  ],
+  providers: [AppService],
 })
 export class AppModule {}
